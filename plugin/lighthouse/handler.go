@@ -44,7 +44,7 @@ func (lh *Lighthouse) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns
 		return lh.nextOrFailure(state.Name(), ctx, w, r, dns.RcodeNameError, "Only services supported")
 	}
 
-	serviceIps, found := lh.serviceImports.GetIPs(pReq.namespace, pReq.service, lh.clusterStatus.IsConnected)
+	serviceIps, found := lh.serviceImports.GetIPs(pReq.namespace, pReq.service, pReq.cluster, lh.clusterStatus.IsConnected)
 	if !found {
 		// We couldn't find record for this service name
 		log.Debugf("No record found for service %q", qname)

@@ -487,8 +487,10 @@ func getGlobalIpFromService(service *corev1.Service) string {
 
 func (a *Controller) remoteEndpointSliceToLocal(obj runtime.Object, op syncer.Operation) (runtime.Object, bool) {
 	endpointSlice := obj.(*discovery.EndpointSlice)
+	ns := endpointSlice.Namespace
 	endpointSlice.Namespace = endpointSlice.GetObjectMeta().GetLabels()[lhconstants.LabelSourceNamespace]
 
+	klog.Infof("In remoteEndpointSliceToLocal for OP %v in NS %q returning %#v", op, ns, endpointSlice)
 	return endpointSlice, false
 }
 
@@ -500,5 +502,6 @@ func (a *Controller) filterLocalEndpointSlices(obj runtime.Object, op syncer.Ope
 		return nil, false
 	}
 
+	klog.Infof("In filterLocalEndpointSlices for OP %v returning %#v", op, obj)
 	return obj, false
 }
